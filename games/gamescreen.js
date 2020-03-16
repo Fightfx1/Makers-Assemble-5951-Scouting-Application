@@ -38,7 +38,7 @@ export default class Game extends Component {
     this.interval = setInterval(async () => {
       const {
         gameState, timeLeft, bestTime, points, bestPoints,
-      } = this.state;
+      } = this____.state;
 
       if (gameState === 'INGAME') {
         if (timeLeft > bestTime) {
@@ -221,7 +221,7 @@ export default class Game extends Component {
                       source={require('../assets/icons/dead.png')}
                       style={styles.pausedIcon}
                     />
-                    <Text style={styles.pausedText}>U DED</Text>
+                    <Text style={styles.pausedText}>U DEAD</Text>
                   </Fragment>
                 )}
                 <TouchableOpacity onPress={this.onExitPress}>

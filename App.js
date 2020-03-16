@@ -27,7 +27,7 @@ class HomeScreen extends Component {
     
     this.props.navigation.navigate('Add Game',  {UserId})
     this.props.navigation.navigate('Home');
-    this.tba = new TBA();
+    this.tba = new TBA("https://25e74bd6.ngrok.io/api/v3");
     this.state = {
       cooljson:[],
       realdata:{}
@@ -36,26 +36,15 @@ class HomeScreen extends Component {
 
   componentDidMount() 
   {
-      this.tba.GetMatches().then((res) => {
+      this.tba.GetMatches(UserId).then((res) => {
         this.setState({realdata:res})
         const tableData = [];
         
         
-        for (let i = 0; i < res.tableData.length; i += 1) {
+        for (let i = 0; i < res.length; i += 1) {
             const rowData = [];
-            rowData.push(`${res.tableData[i]}`);
-            for (let j = 0; j < 6; j ++) 
-            {
-              
-              if(j < 3)
-              {
-                rowData.push(`${res.BlueTeams[i][j]}`);
-              }
-              else
-              {
-                rowData.push(`${res.RedTeams[i][j-3]}`);
-              }
-            }
+            rowData.push(`${res[i]['Match Number']}`);
+            rowData.push(`${res[i]['Team Number']}`);
             tableData.push(rowData);
         }
         
@@ -84,7 +73,7 @@ class HomeScreen extends Component {
           <ScrollView horizontal={true}>
           <View>
             <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
-              <Row data={['M N','Blue', 'Red']} widthArr={[55,240, 240]} style={styles.header} textStyle={styles.text}/>
+              <Row data={['M N','T N']} widthArr={[55,80]} style={styles.header} textStyle={styles.text}/>
             </Table>
             <ScrollView style={styles.dataWrapper}>
               <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
@@ -93,7 +82,7 @@ class HomeScreen extends Component {
                     <Row
                       key={index}
                       data={rowData}
-                      widthArr={[55,80, 80, 80, 80, 80, 80]}
+                      widthArr={[55,80]}
                       style={[styles.row, index%2 && { backgroundColor: '#F7F6E7'}, !index%2 &&{ backgroundColor: '#f2eaa5'}]}
                       textStyle={styles.text}
                     />
@@ -135,7 +124,7 @@ var UserId = ""
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  let  [,setState]=useState();
+  let  [,setState] = useState();
   
   
   function handleUpdate() {

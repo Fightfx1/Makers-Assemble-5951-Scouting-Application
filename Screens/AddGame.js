@@ -38,87 +38,43 @@ let Deffult_Form = {
     Climb:false, // האם הרובוט טיפס בסוף המשחק
     Park:false, // האם הרובוט חנה בסוף המשחק
     Generator_Switch_Level:false, // האם הרובוט עקף את 65 הנקודות בשלב האחרון
+    Was_Broken_or_dc: false // האם הרובוט התנתק באמצע המשחק או נהרס
   },
       
       comments:"" // הערות}
   }
-class DataBase
-{
-    constructor()
-    {
-  
-        const firebaseConfig = {
-            apiKey: "AIzaSyBwtgfOubebl1M7BoBP9cZyJ3ScHIICQ-M",
-            authDomain: "vast-logic-239816.firebaseapp.com",
-            databaseURL: "https://vast-logic-239816.firebaseio.com",
-            projectId: "vast-logic-239816",
-            storageBucket: "vast-logic-239816.appspot.com",
-            messagingSenderId: "281371446684",
-            appId: "1:281371446684:web:cebcdfb9e27626004c0c59",
-            measurementId: "G-MK97XYS3F8"
-          };
-          
-          if(!firebase.apps.length)
-          {
-              firebase.initializeApp(firebaseConfig);
-          }
-          this.db = firebase.firestore()
-          
-      }
-      async AlreadyExsit(UserName)
+
+  class DataBase
+  {
+      constructor()
       {
-          let res = await this.db.collection('GameData').where('Name','==',UserName).get()
-          return res.empty
-      }
-      async NewUser(UserName)
-      {
-          let isExsit = false;
-          
-          await this.AlreadyExsit(UserName).then((res) => {
-              isExsit = res;
-          })
-          
-          if(!isExsit)
-          {
-              return;
-          }
-  
-          let res = await this.db.collection('GameData').add(
-              {
-                  Name:UserName,
-              }   
-          )
-          return res.id
-  
-      }
-      async GetUser(UserName, IsUserName)
-      {
-          if(IsUserName)
-          {
-              let res =  await this.db.collection('GameData').where('Name','==',UserName).get()
-              if(res.empty)
-                  return false;
-  
-              let id = null;
-              await res.forEach((val) => {
-                 id = val.id;
-              })
-              return id
-          }
-          else
-          {
-              let res = await this.db.collection('GameData').doc(UserName).get();
-              return {"data":res.data(),"id":res.id}
-          }
-      }
-      async AddMatch(UserId, Match)
-      {
-          let res = await this.db.collection('GameData').doc(UserId).collection('Matches')
-          await res.add({Match})
-          return await res
-      }
+    
+        const firebaseConfig = {    
+        apiKey: "",
+            authDomain: "",
+            databaseURL: "",
+            projectId: "",
+            storageBucket: "",
+            messagingSenderId: "",
+            appId: "",
+            measurementId: ""
+        };
+            
+            if(!firebase.apps.length)
+            {
+                firebase.initializeApp(firebaseConfig);
+            }
+            this.db = firebase.firestore()
+            
+        }
+        
+        async AddMatch(UserId, Match)
+        {
+            let res = await this.db.collection('ScoutingData')
+            await res.add({Match})
+            return await res
+        }
   }
-  
 export default class AddGameScreen extends Component {
       constructor(props) {
         super(props); // פעולה אשר מפעילה את המחלקה שהמחלקה יורשת
@@ -131,6 +87,7 @@ export default class AddGameScreen extends Component {
               activeSlide: 0,
   
               form: {
+                  ScouterName:this.UserId,
                   TeamNumber: String(1), // שם הקבוצה
                   match: String(1), // מספר המשחק
                   color: 'BLUE', // איזו ברית
@@ -151,7 +108,8 @@ export default class AddGameScreen extends Component {
                       Color:false // האם הרובוט עשה את זה לפי צבע
                   },
                   EndGame: {
-                      Climb:false, // האם הרובוט טיפס בסוף המשחק
+                      Tried_To_Climb:false,
+                      Succeeded_Climb:false, // האם הרובוט טיפס בסוף המשחק
                       Park:false, // האם הרובוט חנה בסוף המשחק
                       Generator_Switch_Level:false, // האם הרובוט עקף את 65 הנקודות בשלב האחרון
                   },

@@ -28,7 +28,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "makersassemble.com"
+      "bundleIdentifier": "Makers.Assemble.com"
     }
   }
 }

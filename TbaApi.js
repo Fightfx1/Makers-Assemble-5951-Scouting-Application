@@ -8,18 +8,25 @@ var sortByProperty = function (property) {
 };
 export default class TBA
 {
-    constructor()
+    constructor(ApiUrl)
     {
         this.request = axios.create({
-            baseURL:"https://www.thebluealliance.com/api/v3",
-            headers:{ 
-                "X-TBA-Auth-Key":"1UdJ32renZi4tMoZpzcoE1ogVfm25VQbheNkpgcKEg0PhoR9uH1AbxUn5vng6irQ"
-            }
-            
+            baseURL:ApiUrl
         })
-        this.EventCode = "2019isde2"
     }
-    async GetMatches()
+
+    async GetMatches(UserName)
+    {
+        let res = await this.request({
+            method: 'get',
+            url:`/GetMatchSchedule/${UserName}`,
+        }).catch(() =>{
+            return {"data":[]}
+        })
+
+        return res.data
+    }
+    async GetMatches1()
     {
         let res = await this.request({
             url:`/event/${this.EventCode}/matches`,
